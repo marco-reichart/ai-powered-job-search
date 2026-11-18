@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Test & Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: latest
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Install Task
+        uses: go-task/setup-task@v1
+
+      - name: Create environment and install dependencies
+        run: uv sync --all-groups --locked
+
+      - name: Run tests
+        run: task test
+
+      - name: Check formatting and types
+        run: task check-format
