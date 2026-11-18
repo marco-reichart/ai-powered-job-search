@@ -5,7 +5,6 @@ from typing import Any
 import pandas as pd
 import requests
 
-
 OLLAMA_API_URL = "http://localhost:11434/api/chat"
 logger = logging.getLogger(__name__)
 
