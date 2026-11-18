@@ -50,6 +50,8 @@ def create_search_run(search_id: int, profile_id: int) -> int:
         )
 
         run_id = cursor.lastrowid
+        if run_id is None:
+            raise RuntimeError("Failed to create search run.")
 
     return run_id
 
@@ -99,6 +101,8 @@ def create_discovery_task(
         )
 
         task_id = cursor.lastrowid
+        if task_id is None:
+            raise RuntimeError("Failed to create discovery task.")
 
     return task_id
 

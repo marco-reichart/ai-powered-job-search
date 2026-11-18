@@ -151,7 +151,7 @@ def get_dashboard_data(search_id: int, minimum_score: float) -> dict[str, Any]:
             (search_id,),
         ).fetchall()
 
-    processing_counts = defaultdict(int)
+    processing_counts: defaultdict[str, int] = defaultdict(int)
     processing_status_by_job = {}
     for row in processing_rows:
         processing_counts[row["processing_status"]] += 1

@@ -97,6 +97,8 @@ def get_or_create_job(job: dict[str, Any]) -> tuple[int, bool]:
             (title, company, location_text, normalized_title, normalized_company, normalized_location),
         )
 
+        if cursor.lastrowid is None:
+            raise RuntimeError("Failed to create canonical job.")
         return cursor.lastrowid, True
 
 
@@ -207,6 +209,8 @@ def save_job_listing(job_id: int, job: dict[str, Any]) -> tuple[int, bool]:
             ),
         )
 
+        if cursor.lastrowid is None:
+            raise RuntimeError("Failed to save job listing.")
         return cursor.lastrowid, True
 
 
@@ -262,6 +266,8 @@ def record_search_run_job(
             (search_run_id, discovery_task_id, job_id, listing_id, processing_status, processing_reason),
         )
 
+        if cursor.lastrowid is None:
+            raise RuntimeError("Failed to record search run job.")
         return cursor.lastrowid, True
 
 
@@ -548,7 +554,7 @@ def get_application_statuses(job_ids: list[int], default_status: str | None = "n
     for row in rows:
         statuses[row["job_id"]] = row["status"]
 
-    return statuses
+    return dict(statuses)
 
 
 def update_application_status(
@@ -729,6 +735,8 @@ def create_evaluation_run(search_id: int, search_run_id: int | None, evaluation_
         )
 
         evaluation_run_id = cursor.lastrowid
+        if evaluation_run_id is None:
+            raise RuntimeError("Failed to create evaluation run.")
 
     return evaluation_run_id
 

@@ -1,17 +1,17 @@
 from typing import Any
 
 
-def calculate_match_score(evaluation: dict[str, Any], score_weights: dict[str, float]) -> float | None:
+def calculate_match_score(evaluation: dict[str, Any], score_weights: dict[str, int]) -> float | None:
     """Calculate a weighted score from available criteria.
 
     Args:
         evaluation (dict[str, Any]): Criterion scores.
-        score_weights (dict[str, float]): Weight for each criterion.
+        score_weights (dict[str, int]): Weight for each criterion.
 
     Returns:
         Overall score from 0 to 100, or None when no scores are available.
     """
-    weighted_score = 0
+    weighted_score = 0.0
     available_weight = 0
 
     for field, weight in score_weights.items():

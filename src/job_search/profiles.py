@@ -26,6 +26,8 @@ def create_job_search(name: str, description: str | None = None) -> int:
             (name.strip(), description),
         )
 
+        if cursor.lastrowid is None:
+            raise RuntimeError("Failed to create job search.")
         return cursor.lastrowid
 
 
@@ -108,6 +110,8 @@ def save_search_profile(
         )
 
         profile_id = cursor.lastrowid
+        if profile_id is None:
+            raise RuntimeError("Failed to save search profile.")
 
     return profile_id
 

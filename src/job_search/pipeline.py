@@ -51,10 +51,10 @@ def run_evaluation_stage(
     if batch_limit is not None and batch_limit < 1:
         raise ValueError("batch_limit must be at least 1.")
 
-    exclude_job_ids = tuple(exclude_job_ids or ())
+    excluded_job_ids = tuple(exclude_job_ids or ())
     excluded_job_clause = ""
-    if exclude_job_ids:
-        placeholders = ",".join("?" for _ in exclude_job_ids)
+    if excluded_job_ids:
+        placeholders = ",".join("?" for _ in excluded_job_ids)
         excluded_job_clause = f"AND srj.job_id NOT IN ({placeholders})"
 
     # Load eligible listing associations that do not have a saved evaluation.
@@ -89,7 +89,7 @@ def run_evaluation_stage(
                 search_run_id,
                 search_id,
                 search_id,
-                *exclude_job_ids,
+                *excluded_job_ids,
             ),
         ).fetchall()
 
@@ -154,7 +154,7 @@ def run_evaluation_stage(
                   )
             """,
                 (search_run_id, search_run_id, search_id, search_id),
-            ).fetchone()[0]
+            ).fetchone()[0] or 0
 
             total_failed = connection.execute(
                 """
@@ -170,7 +170,7 @@ def run_evaluation_stage(
                   )
             """,
                 (search_run_id, search_run_id, search_id, search_id),
-            ).fetchone()[0]
+            ).fetchone()[0] or 0
 
         # Finalize only when no eligible jobs remain.
         if remaining > 0:
@@ -250,7 +250,7 @@ def run_evaluation_batches(
     total_failed = 0
     total_processed = 0
     batch_results = []
-    attempted_job_ids = set()
+    attempted_job_ids: set[int] = set()
 
     for batch_number in range(1, max_batches + 1):
         logger.info("--- Evaluation batch %s/%s ---", batch_number, max_batches)

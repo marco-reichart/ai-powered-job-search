@@ -82,7 +82,9 @@ def classify_jobs(jobs: list[dict[str, Any]], minimum_score: float) -> dict[str,
     Returns:
         Jobs grouped into review, active, filtered, and rejected sections.
     """
-    result = {"review": [], "active": [], "filtered": [], "rejected": []}
+    result: dict[str, list[dict[str, Any]]] = {
+        "review": [], "active": [], "filtered": [], "rejected": []
+    }
     for job in jobs:
         status = job["application_status"]
         location_matches = job["location_matches"]

@@ -314,7 +314,7 @@ def classify_evaluation_result(
         return "filtered_location"
 
     # Apply the configurable minimum score.
-    if overall_score < minimum_score:
+    if overall_score is not None and overall_score < minimum_score:
         return "filtered_score"
 
     return "kept"
